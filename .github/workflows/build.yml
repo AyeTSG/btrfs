@@ -7,13 +7,16 @@ permissions:
 
 jobs:
   cmake:
-    runs-on: ubuntu-22.04  
+    runs-on: ubuntu-latest  
     container:
       image: ghcr.io/ayetsg/btrfs/msvc-wine:924383c4fe59d7bf49209e32a64ba39587d3ec7b
 
     steps:
       - name: Checkout project
         uses: actions/checkout@v4
+
+      - name: Get Essential Build Tools
+        run: apt-get update && apt-get install -y build-essential
 
       - name: Get CMake
         uses: jwlawson/actions-setup-cmake@v2
