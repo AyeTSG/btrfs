@@ -33,7 +33,7 @@ jobs:
     needs: build-image
 
     container:
-      image: ghcr.io/${{ github.repository }}/msvc-wine:${{ github.sha }}
+      image: ghcr.io/ayetsg/btrfs/msvc-wine:${{ github.sha }}
 
     steps:
       - name: Checkout project
