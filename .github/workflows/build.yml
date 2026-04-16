@@ -11,6 +11,9 @@ jobs:
       - name: Clone msvc-wine
         run: git clone https://github.com/maharmstone/msvc-wine.git
 
+      - name: Log in to GHCR
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
       - name: Build Docker image from msvc-wine Dockerfile
         id: image
         run: |
@@ -18,12 +21,16 @@ jobs:
           docker build -t $IMAGE ./msvc-wine
           echo "tag=$IMAGE" >> $GITHUB_OUTPUT
 
+      - name: Push image
+        run: |
+          docker push ghcr.io/${{ github.repository }}/msvc-wine:${{ github.sha }}
+
   cmake:
     runs-on: ubuntu-latest
     needs: build-image
 
     container:
-      image: ${{ needs.build-image.outputs.image }}
+      image: ghcr.io/${{ github.repository }}/msvc-wine:${{ github.sha }}
 
     steps:
       - name: Checkout project
